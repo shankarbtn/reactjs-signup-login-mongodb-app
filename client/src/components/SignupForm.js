@@ -1,3 +1,4 @@
+import {Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
@@ -13,7 +14,7 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Confirm Password mismatches with above Password"),
 });
 
-export default function SignupForm() {
+export default function SignUpForm() {
     const onSubmit = async (userInputValues) => {
         const { cpassword, ...data } =  userInputValues;
 
@@ -43,48 +44,57 @@ export default function SignupForm() {
     });
 
     return (
-        <div className="signup-form-container">
-            <form onSubmit={handleSubmit}> 
-                <div className="mb-3">
-                    <label htmlFor="fullName" className="form-label mb-0">Full name</label>
-                    <input id="fullName" name="fullName" onChange={handleChange} value={values.fullName} className="form-control" placeholder="Enter your full name"/>
-                    {errors.fullName ? <div className="text-danger">{errors.fullName}</div> : null}
+        <>
+            <div className="row">
+                <div className="col text-center p-3 form-title">
+                    <h5>Already a user then <span className="btn btn-info"><Link to="/login">LOGIN</Link></span></h5>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="userName" className="form-label mb-0">User name</label>
-                    <input id="userName" name="userName" onChange={handleChange} value={values.userName} className="form-control" placeholder="Enter your user name"/>
-                    {errors.userName ? <div className="text-danger">{errors.userName}</div> : null}
+            </div>
+            <div className="row">
+                <div className="col d-flex justify-content-center form-container signup-form-container">
+                    <form onSubmit={handleSubmit}> 
+                        <div className="mb-3">
+                            <label htmlFor="fullName" className="form-label mb-0">Full name</label>
+                            <input id="fullName" name="fullName" onChange={handleChange} value={values.fullName} className="form-control" placeholder="Enter your full name"/>
+                            {errors.fullName ? <div className="text-danger">{errors.fullName}</div> : null}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="userName" className="form-label mb-0">User name</label>
+                            <input id="userName" name="userName" onChange={handleChange} value={values.userName} className="form-control" placeholder="Enter your user name"/>
+                            {errors.userName ? <div className="text-danger">{errors.userName}</div> : null}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="email" className="form-label mb-0">Email</label>
+                            <input id="email" name="email" onChange={handleChange} value={values.email} className="form-control" placeholder="Enter your email"/>
+                            {errors.email ? <div className="text-danger">{errors.email}</div> : null}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="userType" className="form-label mb-0">Type of use</label>
+                            <select id="userType" name="userType" onChange={handleChange} value={values.userType} className="form-select" aria-label="Default select example" >
+                                <option value="">Select your type</option>
+                                <option value="Newbie">Newbie</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Professional">Professional</option>
+                                <option value="Expert">Expert</option>
+                            </select>
+                            {errors.userType ? <div className="text-danger">{errors.userType}</div> : null}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="password" className="form-label mb-0">Password</label>
+                            <input id="password" name="password" type="password" onChange={handleChange} value={values.password} className="form-control" placeholder="Enter your password"/>
+                            {errors.password ? <div className="text-danger">{errors.password}</div> : null}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="cpassword" className="form-label mb-0">Confirm Password</label>
+                            <input id="cpassword" name="cpassword" type="password" onChange={handleChange} value={values.cpassword} className="form-control" placeholder="Confirm your password"/>
+                            {errors.cpassword ? <div className="text-danger">{errors.cpassword}</div> : null}
+                        </div>
+                        <div className="text-center">
+                            <button type="submit" className="btn btn-primary">SIGNUP</button>
+                        </div>
+                    </form>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label mb-0">Email</label>
-                    <input id="email" name="email" onChange={handleChange} value={values.email} className="form-control" placeholder="Enter your email"/>
-                    {errors.email ? <div className="text-danger">{errors.email}</div> : null}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="userType" className="form-label mb-0">Type of use</label>
-                    <select id="userType" name="userType" onChange={handleChange} value={values.userType} className="form-select" aria-label="Default select example" >
-                        <option value="">Select your type</option>
-                        <option value="Newbie">Newbie</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Professional">Professional</option>
-                        <option value="Expert">Expert</option>
-                    </select>
-                    {errors.userType ? <div className="text-danger">{errors.userType}</div> : null}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label mb-0">Password</label>
-                    <input id="password" name="password" type="password" onChange={handleChange} value={values.password} className="form-control" placeholder="Enter your password"/>
-                    {errors.password ? <div className="text-danger">{errors.password}</div> : null}
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="cpassword" className="form-label mb-0">Confirm Password</label>
-                    <input id="cpassword" name="cpassword" type="password" onChange={handleChange} value={values.cpassword} className="form-control" placeholder="Confirm your password"/>
-                    {errors.cpassword ? <div className="text-danger">{errors.cpassword}</div> : null}
-                </div>
-                <div className="text-center">
-                    <button type="submit" className="btn btn-primary">SIGNUP</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </>
     );
 }

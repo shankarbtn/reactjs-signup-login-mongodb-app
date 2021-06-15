@@ -5,10 +5,74 @@
 }
 
 body {
-  background-color: beige;
+  background-color:silver !important;
+}
+
+.header {
+  background-color: bisque;
+  padding: 50px;
+}
+
+.header h3{
+  text-align: center;
+  font-weight: 500;
+  font-size: 22px;
+  margin-bottom: 0;
+}
+
+.footer {
+  background-color: bisque;
+  padding: 5px;
+}
+
+.footer h3{
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 0;
 }
 
 .text-danger {
   font-size: 13px;
   font-weight: 600;
+}
+
+.form-title{
+  background-color: lightslategrey;
+  color: #FFF;
+}
+
+.form-title a{
+  font-weight: 400;
+  text-decoration: none;
+  color: #FFF;
+}
+
+.form-title a:hover, a:visited{
+  color: #FFF;
+}
+
+.form-container {
+  background-color: #FFF;
+  padding: 10px;
+}
+
+.form-container form {
+  width: 30%;
+}
+
+/* On screens that are 425px or less */
+@media screen and (max-width: 425px) {
+  .form-container form {
+    width: 40%;
+  }
+}
+
+/* On screens that are 768px or less */
+@media only screen and (max-width: 768px) {
+  .header {
+    padding: 20px;
+  }
+  .form-container form {
+    width: 100%;
+  }
 }
