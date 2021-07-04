@@ -2,10 +2,13 @@ import { Switch, Route } from 'react-router-dom';
 import SignUpForm from './components/SignUpForm';
 import SignInForm from './components/SignInForm';
 import Dashboard from './components/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './store/AuthContext';
 
 import './App.css';
 
 function App() {
+  
   return (
     <div className="container-fluid">
       <div className="row">
@@ -17,17 +20,13 @@ function App() {
       </div>
       <div className="row">
         <div className="col">
+        <AuthProvider>
           <Switch>
-            <Route path="/" exact>
-              <SignUpForm />
-            </Route>
-            <Route path="/login">
-              <SignInForm />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
+            <Route exact path="/" component={SignUpForm} />
+            <Route exact path="/login" component={SignInForm} />
+            <ProtectedRoute exact path="/dashboard" component={Dashboard}/>
           </Switch>
+        </AuthProvider>
         </div>
       </div>
       <div className="row">

@@ -1,4 +1,5 @@
-import {Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
@@ -15,32 +16,36 @@ const validationSchema = Yup.object({
 });
 
 export default function SignUpForm() {
-    const onSubmit = async (userInputValues) => {
+    const [formSuccess, setFormSuccess] = useState('');
+    const [formError, setFormError] = useState('');
+
+    const onSubmit = async (userInputValues, onSubmitProps) => {
         const { cpassword, ...data } =  userInputValues;
-
-        const serverResponse = await axios.post("http://localhost:4000/api/signup", data).catch((err) => {
-            if (err && err.serverResponse) {
-                console.log(err);
-            }
+        
+        setFormSuccess('');
+        setFormError('');
+        
+        await axios.post("http://localhost:4000/APIROUTE/signUp", data)
+        .then(res => {
+            setFormSuccess(res.data.message);
+            onSubmitProps.resetForm();
+        })
+        .catch(err => {
+            setFormError(err.response.data.message);
         });
-
-        if (serverResponse) {
-            console.log(serverResponse);
-            handleSubmit.resetForm();
-          }
     };
-
-    const { handleSubmit, handleChange, values, errors } = useFormik({
-       initialValues: {
-        fullName: '',
-        userName: '',
-        email: '',
-        userType: '',
-        password: '',
-        cpassword: ''
-       },
-       validationSchema,
-       onSubmit
+    
+    const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+        initialValues: {
+            fullName: '',
+            userName: '',
+            email: '',
+            userType: '',
+            password: '',
+            cpassword: ''
+        },
+        validationSchema,
+        onSubmit
     });
 
     return (
@@ -51,22 +56,28 @@ export default function SignUpForm() {
                 </div>
             </div>
             <div className="row">
+                <div className="col text-center p-1 db-message">
+                    {formError ? <span className="alert alert-danger p-1"><b>{formError}</b></span> : ''}
+                    {formSuccess ? <span className="alert alert-success p-1"><b>{formSuccess}</b></span> : ''}
+                </div>
+            </div>
+            <div className="row">
                 <div className="col d-flex justify-content-center form-container signup-form-container">
                     <form onSubmit={handleSubmit}> 
                         <div className="mb-3">
                             <label htmlFor="fullName" className="form-label mb-0">Full name</label>
                             <input id="fullName" name="fullName" onChange={handleChange} value={values.fullName} className="form-control" placeholder="Enter your full name"/>
-                            {errors.fullName ? <div className="text-danger">{errors.fullName}</div> : null}
+                            {touched.firstName && errors.fullName ? <div className="text-danger">{errors.fullName}</div> : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="userName" className="form-label mb-0">User name</label>
                             <input id="userName" name="userName" onChange={handleChange} value={values.userName} className="form-control" placeholder="Enter your user name"/>
-                            {errors.userName ? <div className="text-danger">{errors.userName}</div> : null}
+                            {touched.userName && errors.userName ? <div className="text-danger">{errors.userName}</div> : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label mb-0">Email</label>
                             <input id="email" name="email" onChange={handleChange} value={values.email} className="form-control" placeholder="Enter your email"/>
-                            {errors.email ? <div className="text-danger">{errors.email}</div> : null}
+                            {touched.email && errors.email ? <div className="text-danger">{errors.email}</div> : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="userType" className="form-label mb-0">Type of use</label>
@@ -77,17 +88,17 @@ export default function SignUpForm() {
                                 <option value="Professional">Professional</option>
                                 <option value="Expert">Expert</option>
                             </select>
-                            {errors.userType ? <div className="text-danger">{errors.userType}</div> : null}
+                            {touched.userType && errors.userType ? <div className="text-danger">{errors.userType}</div> : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label mb-0">Password</label>
                             <input id="password" name="password" type="password" onChange={handleChange} value={values.password} className="form-control" placeholder="Enter your password"/>
-                            {errors.password ? <div className="text-danger">{errors.password}</div> : null}
+                            {touched.password && errors.password ? <div className="text-danger">{errors.password}</div> : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpassword" className="form-label mb-0">Confirm Password</label>
                             <input id="cpassword" name="cpassword" type="password" onChange={handleChange} value={values.cpassword} className="form-control" placeholder="Confirm your password"/>
-                            {errors.cpassword ? <div className="text-danger">{errors.cpassword}</div> : null}
+                            {touched.cpassword && errors.cpassword ? <div className="text-danger">{errors.cpassword}</div> : null}
                         </div>
                         <div className="text-center">
                             <button type="submit" className="btn btn-primary">SIGNUP</button>

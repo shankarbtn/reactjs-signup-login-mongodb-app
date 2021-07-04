@@ -1,14 +1,15 @@
 const express = require("express");
 const app = express();
+//const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
 const routeUrls = require("../api/routes/routes");
+const cookieParser = require("cookie-parser");
+//dotenv.config();
 
-dotenv.config();
-
-mongoose.connect(
-    process.env.DATABASE_ACCESS,
+//connect to MongoDB
+const MGDB_URL = "mongodb+srv://reactjs-signup-db-user:0OTV5at7HY9McIck@cluster0.czbmb.mongodb.net/user_signup_db?retryWrites=true&w=majority";
+mongoose.connect(MGDB_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -20,12 +21,22 @@ mongoose.connect(
 );
 
 app.use(express.json());
-app.use(cors());
-app.use("/api", routeUrls);
+app.use(cookieParser());
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+}));
 
-// use port 3000 unless there exists a preconfigured port
+
+//API Model routers
+app.use("/APIROUTE", routeUrls);
+
+app.use("/", (req, res) => {
+    res.send('Welcome to server');
+});
+
+// use port 4000 unless there exists a preconfigured port
 const port = process.env.PORT || 4000;
-
 app.listen(port, () => {
     console.log(`API Server started listening ${port}...`);
 });
